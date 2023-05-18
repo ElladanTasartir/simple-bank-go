@@ -11,16 +11,14 @@ installsqlc:
 	go install github.com/kyleconroy/sqlc/cmd/sqlc@latest
 
 installmigrate:
-	curl -L https://github.com/golang-migrate/migrate/releases/download/v4.15.2/migrate.linux-amd64.tar.gz | tar xvz && rm LICENSE README.md
-
-removemigrate:
-	rm migrate
+	curl -L https://github.com/golang-migrate/migrate/releases/download/v4.15.2/migrate.linux-amd64.tar.gz | tar xvz 
+		&& mv migrate /usr/bin 
 
 migrateup:
-	./migrate -path db/migration -database "postgresql://root:secret@localhost:5432/simple_bank?sslmode=disable" --verbose up
+	migrate -path db/migration -database "postgresql://root:secret@localhost:5432/simple_bank?sslmode=disable" --verbose up
 
 migratedown:
-	./migrate -path db/migration -database "postgresql://root:secret@localhost:5432/simple_bank?sslmode=disable" --verbose down
+	migrate -path db/migration -database "postgresql://root:secret@localhost:5432/simple_bank?sslmode=disable" --verbose down
 
 sqlc:
 	sqlc generate
@@ -28,4 +26,4 @@ sqlc:
 test:
 	go test -v -cover ./...
 
-.PHONY: postgres createdb dropdb migrateup migratedown installmigrate removemigrate installsqlc sqlc test
+.PHONY: postgres createdb dropdb migrateup migratedown installmigrate installsqlc sqlc test
